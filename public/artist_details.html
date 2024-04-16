@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Artist Details</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <header>
+        <img src="clef-flat-icon-free-vector-removebg-preview.png" alt="Spotify Logo" height="80px">
+        <h1>Artist Details</h1>
+    </header>
+    <main>
+        <h2 id="artistName"></h2>
+        <p id="listenerCount"></p>
+        <p id="followerCount"></p>
+        <h3>Albums</h3>
+        <ul id="albumList"></ul>
+    </main>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const artistName = urlParams.get('artist');
+        document.getElementById('pageTitle').textContent = artistName;
+        document.getElementById('artistName').textContent = artistName;
+
+        fetch(`/artist_details?artist=${encodeURIComponent(artistName)}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('listenerCount').textContent = `Listeners: ${data.listener_count}`;
+                document.getElementById('followerCount').textContent = `Followers: ${data.follower_count}`;
+            })
+            .catch(error => console.error('Error fetching artist details:', error));
+
+        fetch(`/artist_albums?artist=${encodeURIComponent(artistName)}`)
+            .then(response => response.json())
+            .then(data => {
+                const albumList = document.getElementById('albumList');
+                data.forEach(album => {
+                    const albumItem = document.createElement('li');
+                    albumItem.textContent = album.album_name;
+                    albumList.appendChild(albumItem);
+                });
+            })
+            .catch(error => console.error('Error fetching artist albums:', error));
+    </script>
+</body>
+</html>
