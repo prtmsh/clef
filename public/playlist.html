@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playlists</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .create-playlist-button {
+            display: block;
+            width: 200px;
+            margin: 0 auto;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #1DB954;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-playlist-button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #FF0000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="clef-flat-icon-free-vector-removebg-preview.png" alt="Spotify Logo">
+        <h1>Clef</h1>
+    </header>
+    <main>
+        <h2>Select a Playlist</h2>
+        <div class="playlist-container" id="playlistContainer">
+            <!-- Playlists will be dynamically generated here -->
+        </div>
+        <button class="create-playlist-button" onclick="createPlaylist()">Create Playlist</button>
+        <button class="delete-playlist-button" onclick="deleteLastPlaylist()">Delete Last Playlist</button>
+    </main>
+
+    <script>
+        // Fetch playlist names from the server
+        fetch('/playlists')
+            .then(response => response.json())
+            .then(data => {
+                const playlistContainer = document.getElementById('playlistContainer');
+
+                // Loop through the playlist data and create buttons for each playlist
+                data.forEach(playlist => {
+                    const button = document.createElement('button');
+                    button.classList.add('playlist-button');
+                    button.textContent = playlist.playlist_name;
+                    button.addEventListener('click', () => {
+                        fetchPlaylistDetails(playlist.playlist_name);
+                    });
+                    playlistContainer.appendChild(button);
+                });
+            })
+            .catch(error => console.error('Error fetching playlists:', error));
+
+        // Function to fetch playlist details by name
+        function fetchPlaylistDetails(playlistName) {
+            window.location.href = `/playlist_details.html?name=${encodeURIComponent(playlistName)}`;
+        }
+
+        // Function to redirect to new_playlist.html
+        function createPlaylist() {
+            window.location.href = "/new_playlist.html";
+        }
+
+        // Function to delete the last created playlist
+        function deleteLastPlaylist() {
+            fetch('/delete_last_playlist', { method: 'DELETE' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Last playlist deleted successfully.');
+                        // Refresh the page after deletion
+                        location.reload();
+                    } else {
+                        alert('Failed to delete last playlist.');
+                    }
+                })
+                .catch(error => console.error('Error deleting last playlist:', error));
+        }
+    </script>
+</body>
+</html>
