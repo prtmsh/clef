@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Playlist</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <img src="clef-flat-icon-free-vector-removebg-preview.png" alt="Spotify Logo">
+        <h1>Clef</h1>
+    </header>
+    <main>
+        <h2>Create New Playlist</h2>
+        <form id="playlistForm">
+            <label for="playlistName">Playlist Name:</label>
+            <input type="text" id="playlistName" name="playlistName" required>
+            <h3>Select Tracks</h3>
+            <div id="trackList"></div>
+            <button type="submit">Create Playlist</button>
+        </form>
+    </main>
+
+    <script>
+        // Fetch tracks from the server
+        fetch('/tracks')
+            .then(response => response.json())
+            .then(data => {
+                const trackList = document.getElementById('trackList');
+                data.forEach(track => {
+                    const trackItem = document.createElement('div');
+                    trackItem.innerHTML = `
+                        <input type="checkbox" id="track${track.track_id}" name="tracks" value="${track.track_id}">
+                        <label for="track${track.track_id}">${track.track_name}</label>
+                        <input type="hidden" name="trackIds" value="${track.track_id}">
+                        <input type="hidden" name="durations" value="${track.duration}">
+                    `;
+                    trackList.appendChild(trackItem);
+                });
+            })
+            .catch(error => console.error('Error fetching tracks:', error));
+
+        // Handle form submission
+        document.getElementById('playlistForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const selectedTracks = Array.from(formData.getAll('tracks'));
+            const trackIds = Array.from(formData.getAll('trackIds'));
+            const durations = Array.from(formData.getAll('durations'));
+
+            // Filter out any undefined or empty values from the selectedTracks array
+            const filteredTracks = selectedTracks.filter(trackId => trackId); 
+
+            const playlistName = formData.get('playlistName');
+
+            // Check if at least one track is selected
+            if (filteredTracks.length === 0) {
+                return alert('Please select at least one track.');
+            }
+
+            // Create playlist and add tracks
+            fetch('/create_playlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    playlistName, 
+                    selectedTracks: filteredTracks.map(trackId => parseInt(trackId)),
+                    trackIds,
+                    durations
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Playlist created successfully!');
+                    window.location.href = `/playlist.html?name=${encodeURIComponent(playlistName)}`; // Redirect to playlist page with new playlist name
+                } else {
+                    alert('Failed to create playlist.');
+                }
+            })
+            .catch(error => console.error('Error creating playlist:', error));
+        });
+    </script>
+</body>
+</html>
