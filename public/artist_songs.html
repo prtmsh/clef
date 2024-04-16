@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Songs</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <header>
+        <img src="./clef-flat-icon-free-vector.jpg" alt="Spotify Logo" height="80px">
+        <h1>Artist Songs</h1>
+    </header>
+    <main id="songList" class="song-container"></main>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const artistName = urlParams.get('artist');
+
+        fetch(`/artist_songs?artist=${encodeURIComponent(artistName)}`)
+            .then(response => response.json())
+            .then(data => {
+                const songList = document.getElementById('songList');
+                data.forEach(song => {
+                    const songBox = document.createElement('div');
+                    songBox.classList.add('song-box');
+                    songBox.textContent = song.song_name;
+                    songList.appendChild(songBox);
+                });
+            })
+            .catch(error => console.error('Error fetching artist songs:', error));
+    </script>
+</body>
+</html>
