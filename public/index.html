@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clef</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <header>
+        <img src="clef-flat-icon-free-vector-removebg-preview.png" alt="Spotify Logo" height="80px">
+        <h1>Clef</h1>
+    </header>
+    <main>
+        <h2 class="home-desc">Discover new music and view your own playlists</h2>
+        <div class="menus">
+        <button id="getStartedBtn" class="homebutton">Get Started</button>
+        <a href="/recommended_artists.html"><button class="homebutton">Recommended Artists</button></a>
+        <a href="/random_playlist.html"><button class="homebutton">Shuffle!</button></a>
+    </div>
+    </main>
+
+    <ul id="playlistList"></ul>
+
+    <script>
+        document.getElementById('getStartedBtn').addEventListener('click', () => {
+            fetchDataAndRedirect();
+        });
+
+        function fetchDataAndRedirect() {
+            fetch('/playlists')
+                .then(response => response.json())
+                .then(data => {
+                    const playlistList = document.getElementById('playlistList');
+                    playlistList.innerHTML = '';
+                    data.forEach(playlist => {
+                        const li = document.createElement('li');
+                        li.textContent = playlist.playlist_name;
+                    });
+                    window.location.href = '/playlist.html';
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
