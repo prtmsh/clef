@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommended Artists</title>
+    <link rel="stylesheet" href="./styles.css">
+    <style>
+        .artist-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 10px; /* Add some padding to prevent the buttons from sticking to the edges */
+            margin-top: 20px; /* Add margin to the top of the container */
+        }
+
+        .artist-button {
+            margin-bottom: 10px; /* Add some bottom margin to create space between rows */
+            width: calc(20% - 20px); /* 20% width for each button with 20px margin between */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Recommended Artists</h1>
+    </header>
+    <main id="artistList" class="artist-container"></main>
+
+    <script>
+        fetch('/recommended_artists')
+            .then(response => response.json())
+            .then(data => {
+                const artistList = document.getElementById('artistList');
+                data.forEach(artist => {
+                    const artistBox = document.createElement('button');
+                    artistBox.classList.add('artist-button');
+                    artistBox.textContent = artist.artist_name;
+                    artistBox.addEventListener('click', () => {
+                        window.location.href = `/artist_details.html?artist=${encodeURIComponent(artist.artist_name)}`;
+                    });
+                    artistList.appendChild(artistBox);
+                });
+            })
+            .catch(error => console.error('Error fetching recommended artists:', error));
+    </script>
+</body>
+</html>
