@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Dancing+Script:wght@400..700&display=swap');
+
+body {
+    /* font-family: Arial, sans-serif; */
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+    background-color: #000000; /* Set background color to black */
+    color: white; /* Set text color to white */
+}
+
+header {
+    font-family: "Dancing Script", cursive;
+    font-size: 1.3rem;
+    background-color: #386C0B; /* Set header background color to Spotify green */
+    color: white;
+    display: flex;
+    justify-content: flex-start;
+    padding: 1rem;
+}
+
+header img {
+    width: 100px;
+    height: 100px; /* Adjust the size of the Spotify logo */
+    margin-right: 20px; /* Add margin to the right of the logo */
+}
+
+main {
+    padding: 2.5rem;
+}
+
+.home-desc {
+    text-align: center;
+}
+
+.menus {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button {
+    background-color: #603140; /* Spotify green */
+    border: none;
+    border-radius: 25px; /* Rounded corners */
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition: all 0.3s ease; /* Add transition for smooth animation */
+}
+
+button:hover {
+    background-color: #386C0B; /* Lighter shade of green on hover */
+    cursor: pointer;
+}
+
+button:active {
+    background-color: #000080; /* Reset to original green color on active */
+    box-shadow: 0 0 0 0px #1DB954; /* Remove box-shadow on active */
+}
+
+.playlist-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive grid layout */
+    gap: 20px; /* Add space between playlist boxes */
+    padding: 20px;
+}
+
+.playlist-box {
+    background-color: #333; /* Dark background color for the playlist box */
+    color: white;
+    padding: 10px;
+    border-radius: 15px; /* Rounded corners */
+}
+
+.playlist-box h3 {
+    margin: 0;
+}
+
+.playlist-box p {
+    margin: 5px 0;
+}
+
+.homebutton {
+    min-width: 18vw;
+    /* background-color: #B6DC76;
+    color: black; */
+    font-size: 1.2rem;
+    margin: 0.6vw;
+}
