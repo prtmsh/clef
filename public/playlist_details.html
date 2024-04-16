@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playlist Details</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <img src="clef-flat-icon-free-vector-removebg-preview.png" alt="Spotify Logo"> <!-- Add the Spotify logo image -->
+        <h1>Clef</h1>
+    </header>
+    <main>
+        <h2 id="playlist-name"></h2>
+        <h3>Total Duration: <span id="total-duration"></span></h3>
+        <div id="trackList"></div>
+    </main>
+    <script>
+        // Get the playlist name from the URL query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const playlistName = urlParams.get('name');
+
+        // Update the playlist name heading
+        document.getElementById('playlist-name').textContent = playlistName;
+
+        // Fetch total duration of the playlist from the server
+        fetch(`/calculate_playlist_duration?name=${encodeURIComponent(playlistName)}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('total-duration').textContent = formatDuration(data.totalDuration);
+            })
+            .catch(error => console.error('Error fetching playlist duration:', error));
+
+        // Function to convert seconds to MM:SS format
+        function formatDuration(durationInSeconds) {
+            const minutes = Math.floor(durationInSeconds / 60);
+            const seconds = durationInSeconds % 60;
+
+            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Fetch playlist details from the server
+        fetch(`/playlist_details?name=${encodeURIComponent(playlistName)}`)
+            .then(response => response.json())
+            .then(data => {
+                const trackList = document.getElementById('trackList');
+                data.forEach(track => {
+                    const trackItem = document.createElement('div');
+                    const formattedDuration = formatDuration(track.duration);
+                    trackItem.textContent = `${track.track_name} - ${formattedDuration}`;
+                    trackList.appendChild(trackItem);
+                });
+            })
+            .catch(error => console.error('Error fetching playlist details:', error));
+    </script>
+</body>
+</html>
