@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Playlist</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <header>
+        <img src="clef-flat-icon-free-vector-removebg-preview.png" alt="Spotify Logo" height="80px">
+        <h1>Random Playlist</h1>
+    </header>
+    <main id="playlist">
+        <!-- Playlist will be displayed here -->
+    </main>
+
+    <script>
+        // Function to convert seconds to MM:SS format
+        function formatDuration(durationInSeconds) {
+            const minutes = Math.floor(durationInSeconds / 60);
+            const seconds = durationInSeconds % 60;
+
+            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        fetch('/random_tracks')
+            .then(response => response.json())
+            .then(data => {
+                const playlistElement = document.getElementById('playlist');
+
+                data.forEach(track => {
+                    const trackDiv = document.createElement('div');
+                    const formattedDuration = formatDuration(track.duration);
+                    trackDiv.textContent = `${track.track_name} - ${formattedDuration}`;
+                    playlistElement.appendChild(trackDiv);
+                });
+            })
+            .catch(error => console.error('Error fetching random tracks:', error));
+
+        // Function to create a playlist
+        function createPlaylist() {
+            // Send a POST request to the server to create a new playlist
+            fetch('/create_playlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    playlistName: 'Random Playlist', // You can specify a name for the playlist here
+                    selectedTracks: [] // Since tracks are randomly generated, there are no selected tracks here
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect to the playlist page after successfully creating the playlist
+                    window.location.href = "/playlist.html?random=true";
+                } else {
+                    console.error('Failed to create playlist.');
+                }
+            })
+            .catch(error => console.error('Error creating playlist:', error));
+        }
+    </script>
+</body>
+</html>
