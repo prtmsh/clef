@@ -50,7 +50,7 @@ Follow these steps to set up the project locally:
 ## Contact
 
 If you have any questions or suggestions, feel free to reach out to me:
-  Email: [](mailto:prathameshpadiyar@gmail.com)
-  LinkedIn: [](https://www.linkedin.com/in/prathameshpadiyar/)
+  [Email](mailto:prathameshpadiyar@gmail.com)
+  [LinkedIn](https://www.linkedin.com/in/prathameshpadiyar/)
 
 ### Thank you for using Clef! Enjoy managing your music collection.
