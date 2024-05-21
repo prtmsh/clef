@@ -48,9 +48,9 @@ Follow these steps to set up the project locally:
    Open your browser and navigate to `http://localhost:3000`
 
 ## Contact
+
 If you have any questions or suggestions, feel free to reach out to me:
-  Name: Prathamesh
-  Email: [Email me](mailto:prathameshpadiyar@gmail.com)
-  LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/prathameshpadiyar/)
+  Email: [](mailto:prathameshpadiyar@gmail.com)
+  LinkedIn: [](https://www.linkedin.com/in/prathameshpadiyar/)
 
 ### Thank you for using Clef! Enjoy managing your music collection.
